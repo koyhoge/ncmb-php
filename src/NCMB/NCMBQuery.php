@@ -18,7 +18,6 @@ class NCMBQuery
 
     public function find($queries = array())
     {
-        $client = new GuzzleHttp\Client();
         $url = sprintf(
             '%s/%s/%s/%s',
             NCMB::get('apiUrl'),
@@ -34,6 +33,7 @@ class NCMBQuery
 
         $res = null;
         try {
+            $client = new GuzzleHttp\Client();
             $res = $client->get($url,
                 array(
                     'headers' => array(
@@ -42,6 +42,43 @@ class NCMBQuery
                         'X-NCMB-Timestamp' => $timestamp,
                     ),
                     'query' => $queries
+                )
+            );
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $res = $e->getResponse();
+            }
+        }
+
+        return $res;
+    }
+
+    public function findOneById($objectId)
+    {
+        $url = sprintf(
+            '%s/%s/%s/%s/%s',
+            NCMB::get('apiUrl'),
+            NCMB::get('apiVersion'),
+            'classes',
+            $this->className,
+            $objectId
+        );
+
+        $timestamp = $this->timestamp();
+        $sign = $this->sign($url, 'GET', array(), $timestamp);
+
+        $applicationKey = NCMB::get('appId');
+
+        $res = null;
+        try {
+            $client = new GuzzleHttp\Client();
+            $res = $client->get($url,
+                array(
+                    'headers' => array(
+                        'X-NCMB-Application-Key' => $applicationKey,
+                        'X-NCMB-Signature' => $sign,
+                        'X-NCMB-Timestamp' => $timestamp,
+                    ),
                 )
             );
         } catch (RequestException $e) {

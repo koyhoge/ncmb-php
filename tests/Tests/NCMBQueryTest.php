@@ -53,4 +53,17 @@ class NCMBQueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $result->getStatusCode());
         $this->assertTrue(is_array($data['results']));
     }
+
+    /**
+     * @test
+     */
+    public function findOneByIdはオブジェクトを取得できる()
+    {
+        $query = new NCMBQuery('TestClass');
+        $res = $query->findOneById('Y9dKmDYrOQS6TGDa');
+        $data = $res->json();
+
+        $this->assertEquals(200, $res->getStatusCode());
+        $this->assertEquals('Y9dKmDYrOQS6TGDa', $data['objectId']);
+    }
 }
