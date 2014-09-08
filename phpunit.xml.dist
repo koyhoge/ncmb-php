@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./tests/bootstrap.php"
+         colors="true">
+
+    <php>
+        <server name="ID" value="foo" />
+        <server name="KEY" value="bar" />
+    </php>
+
+    <testsuites>
+        <testsuite name="all">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src/NCMB</directory>
+        </whitelist>
+    </filter>
+
+</phpunit>
