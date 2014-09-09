@@ -15,7 +15,7 @@ class NCMBAPIClientTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function hoge()
+    public function getできる()
     {
 
         $path = '/classes/TestClass';
@@ -29,5 +29,22 @@ class NCMBAPIClientTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(200, $res->getStatusCode());
         $this->assertTrue(is_array($data['results']));
+    }
+
+    /**
+     * @test
+     */
+    public function postできる()
+    {
+        $path = '/classes/TestClass';
+
+        $client = new NCMBAPIClient();
+        $res = $client->post($path, array(
+            'json' => array('message' => 'test'),
+        ));
+        $data = $res->json();
+
+        $this->assertEquals(201, $res->getStatusCode());
+        $this->assertTrue(isset($data['objectId']));
     }
 }
