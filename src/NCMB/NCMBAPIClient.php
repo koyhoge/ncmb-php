@@ -9,32 +9,57 @@ use GuzzleHttp\Exception\RequestException;
 
 class NCMBAPIClient
 {
-    public function get($path, $queries = array())
+    private $client;
+
+    public function __construct(GuzzleHttp\ClientInterface $client = null)
     {
-        $url = sprintf(
-            '%s/%s%s',
-            NCMB::get('apiUrl'),
-            NCMB::get('apiVersion'),
-            $path
-        );
+        $this->client = $client ? $client : new GuzzleHttp\Client();
+    }
 
-        $timestamp = $this->timestamp();
-        $sign = $this->sign($url, 'GET', $queries, $timestamp);
+    public function getClient()
+    {
+        return $this->client;
+    }
 
+    public function get($path, $options = array())
+    {
+        return $this->send('GET', $path, $options);
+    }
+
+    public function post($path, array $options = array())
+    {
+        return $this->send('POST', $path, $options);
+    }
+
+    public function send($method, $path, array $options = array())
+    {
+        $url = $this->createAbsURL($path);
+        $headers = $this->createDefaultHeaders($method, $url, $options);
+        $this->client->setDefaultOption('headers', $headers);
+
+        return $this->client->send($this->client->createRequest($method, $url, $options));
+    }
+
+    protected function createAbsURL($path)
+    {
+        return sprintf('%s/%s%s', NCMB::get('apiUrl'), NCMB::get('apiVersion'), $path);
+    }
+
+    protected function createDefaultHeaders($method, $url, array $options = array())
+    {
         $applicationKey = NCMB::get('appId');
+        $timestamp = $this->timestamp();
+        $query = isset($options['query']) ? $options['query'] : array();
 
-        $client = new GuzzleHttp\Client();
+        $sign = $this->sign($method, $url, $query, $timestamp);
 
-        return $client->get($url,
-            array(
-                'headers' => array(
-                    'X-NCMB-Application-Key' => $applicationKey,
-                    'X-NCMB-Signature' => $sign,
-                    'X-NCMB-Timestamp' => $timestamp,
-                ),
-                'query' => $queries
-            )
+        $headers = array(
+            'X-NCMB-Application-Key' => $applicationKey,
+            'X-NCMB-Signature' => $sign,
+            'X-NCMB-Timestamp' => $timestamp,
         );
+
+        return $headers;
     }
 
     protected function timestamp()
@@ -51,7 +76,7 @@ class NCMBAPIClient
         return $timestamp;
     }
 
-    protected function sign($url, $method, $params, $timestamp)
+    protected function sign($method, $url, $params, $timestamp)
     {
         $application_key = NCMB::get('appId');
         $client_key = NCMB::get('clientKey');

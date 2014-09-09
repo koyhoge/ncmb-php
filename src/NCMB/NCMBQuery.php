@@ -21,9 +21,10 @@ class NCMBQuery
         );
 
         $client = new NCMBAPIClient();
-        $res = $client->get($path, $queries);
 
-        return $res;
+        return $client->get($path, array(
+            'query' => $queries
+        ));
     }
 
     public function findOneById($objectId)
@@ -36,8 +37,7 @@ class NCMBQuery
         );
 
         $client = new NCMBAPIClient();
-        $res = $client->get($path);
 
-        return $res;
+        return $client->get($path);
     }
 }

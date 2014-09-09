@@ -22,11 +22,12 @@ class NCMBAPIClientTest extends \PHPUnit_Framework_TestCase
         $queries = array();
 
         $client = new NCMBAPIClient();
-        $res = $client->get($path, $queries);
+        $res = $client->get($path, array(
+            'query' => $queries
+        ));
         $data = $res->json();
 
         $this->assertEquals(200, $res->getStatusCode());
         $this->assertTrue(is_array($data['results']));
     }
-
 }
