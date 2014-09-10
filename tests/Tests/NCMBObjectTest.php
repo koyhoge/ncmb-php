@@ -2,10 +2,16 @@
 
 namespace NCMB\Test;
 
+use NCMB\NCMB;
 use NCMB\NCMBObject;
 
 class NCMBObjectTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        NCMB::init(TEST_APPLICATION_ID, TEST_CLIENT_KEY);
+    }
+
     /**
      * @test
      */

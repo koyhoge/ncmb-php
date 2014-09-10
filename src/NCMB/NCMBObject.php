@@ -23,10 +23,15 @@ class NCMBObject
         return isset($this->data[$key]) ? $this->data[$key] : null;
     }
 
+    protected function getApiPath()
+    {
+        return '/classes/' . $this->className;
+    }
+
     public function save()
     {
         $client = new NCMBAPIClient();
-        $path = '/classes/' . $this->className;
+        $path = $this->getApiPath();
         $options = array(
             'json' => $this->data,
         );
