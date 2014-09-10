@@ -18,7 +18,7 @@ class NCMBUserTest extends \PHPUnit_Framework_TestCase
     public function saveができる()
     {
         $user = new NCMBUser();
-        $uniqid = uniqid('test');
+        $uniqid = uniqid('test', true);
 
         $user->put('userName', $uniqid);
         $user->put('password', 'password');
@@ -31,5 +31,67 @@ class NCMBUserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($data['createDate']));
         $this->assertTrue(!empty($data['sessionToken']));
         $this->assertEquals($uniqid, $data['userName']);
+    }
+
+    /**
+     * @test
+     */
+    public function sessionTokenを設定取得できる()
+    {
+        $user = new NCMBUser();
+        $user->setSessionToken('aaa');
+
+        $this->assertEquals('aaa', $user->getSessionToken());
+    }
+
+    /**
+     * @test
+     */
+    public function loginができる()
+    {
+        $user = new NCMBUser();
+        $uniqid = uniqid('test', true);
+        $password = 'password';
+
+        $user->put('userName', $uniqid);
+        $user->put('password', $password);
+        $res = $user->save();
+
+        $this->assertEquals(201, $res->getStatusCode());
+
+        $res = $user->login($uniqid, $password);
+        $data = $res->json();
+
+        $this->assertEquals(200, $res->getStatusCode());
+        $this->assertEquals($uniqid, $data['userName']);
+        $this->assertTrue(!empty($data['sessionToken']));
+
+        $this->assertEquals($data['sessionToken'], $user->getSessionToken());
+    }
+
+    /**
+     * @test
+     */
+    public function logoutできる()
+    {
+        $user = new NCMBUser();
+        $uniqid = uniqid('test', true);
+        $password = 'password';
+
+        $user->put('userName', $uniqid);
+        $user->put('password', $password);
+        $res = $user->save();
+
+        $this->assertEquals(201, $res->getStatusCode());
+
+        $res = $user->login($uniqid, $password);
+        $this->assertEquals(200, $res->getStatusCode());
+        $this->assertTrue(!empty($user->getSessionToken()));
+
+        $res = $user->logout();
+        $data = $res->json();
+
+        $this->assertEquals(200, $res->getStatusCode());
+        $this->assertEquals(null, $data);
     }
 }
