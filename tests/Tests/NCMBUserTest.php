@@ -94,4 +94,29 @@ class NCMBUserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $res->getStatusCode());
         $this->assertEquals(null, $data);
     }
+
+    /**
+     * @test
+     * @expectedException GuzzleHttp\Exception\ClientException
+     */
+    public function 同userでのloginすると旧sessionTokenは使えなくなる()
+    {
+        $user = new NCMBUser();
+        $uniqid = uniqid('test', true);
+        $password = 'password';
+        $user->put('userName', $uniqid);
+        $user->put('password', $password);
+        $res = $user->save();
+
+        $this->assertEquals(201, $res->getStatusCode());
+        $res1 = $user->login($uniqid, $password);
+        $sessionToken1 = $user->getSessionToken();
+
+        $user2 = new NCMBUser();
+        $res2 = $user2->login($uniqid, $password);
+        $sessionToken2 = $user2->getSessionToken();
+
+        $this->assertNotEquals($sessionToken1, $sessionToken2);
+        $user->logout();
+    }
 }
