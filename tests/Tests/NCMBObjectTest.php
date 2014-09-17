@@ -18,8 +18,8 @@ class NCMBObjectTest extends \PHPUnit_Framework_TestCase
     public function putとgetができる()
     {
         $gameScore = new NCMBObject('gameScore');
-        $gameScore->put('score', 1000);
-        $gameScore->put('playerName', 'GuestUser');
+        $gameScore->set('score', 1000);
+        $gameScore->set('playerName', 'GuestUser');
 
         $this->assertEquals(1000, $gameScore->get('score'));
         $this->assertEquals('GuestUser', $gameScore->get('playerName'));
@@ -31,8 +31,8 @@ class NCMBObjectTest extends \PHPUnit_Framework_TestCase
     public function saveができる()
     {
         $gameScore = new NCMBObject('gameScore');
-        $gameScore->put('score', 1000);
-        $gameScore->put('playerName', 'GuestUser');
+        $gameScore->set('score', 1000);
+        $gameScore->set('playerName', 'GuestUser');
         $res = $gameScore->save();
         $data = $res->json();
 

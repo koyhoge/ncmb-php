@@ -11,7 +11,7 @@ class NCMBObject
         $this->className = $className;
     }
 
-    public function put($key, $val)
+    public function set($key, $val)
     {
         $this->data[$key] = $val;
     }

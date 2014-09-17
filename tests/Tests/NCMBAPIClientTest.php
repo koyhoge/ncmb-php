@@ -12,14 +12,8 @@ class NCMBAPIClientTest extends \PHPUnit_Framework_TestCase
      */
     public function getできる()
     {
-
-        $path = '/classes/TestClass';
-        $queries = array();
-
         $client = NCMBAPIClient::create(TEST_APPLICATION_ID, TEST_CLIENT_KEY);
-        $res = $client->get($path, array(
-            'query' => $queries
-        ));
+        $res = $client->get('/classes/TestClass');
         $data = $res->json();
 
         $this->assertEquals(200, $res->getStatusCode());
@@ -31,10 +25,8 @@ class NCMBAPIClientTest extends \PHPUnit_Framework_TestCase
      */
     public function postできる()
     {
-        $path = '/classes/TestClass';
-
         $client = NCMBAPIClient::create(TEST_APPLICATION_ID, TEST_CLIENT_KEY);
-        $res = $client->post($path, array(
+        $res = $client->post('/classes/TestClass', array(
             'json' => array('message' => 'test'),
         ));
         $data = $res->json();

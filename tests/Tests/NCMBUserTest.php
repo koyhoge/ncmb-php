@@ -20,8 +20,8 @@ class NCMBUserTest extends \PHPUnit_Framework_TestCase
         $user = new NCMBUser();
         $uniqid = uniqid('test', true);
 
-        $user->put('userName', $uniqid);
-        $user->put('password', 'password');
+        $user->set('userName', $uniqid);
+        $user->set('password', 'password');
 
         $res = $user->save();
         $data = $res->json();
@@ -53,8 +53,8 @@ class NCMBUserTest extends \PHPUnit_Framework_TestCase
         $uniqid = uniqid('test', true);
         $password = 'password';
 
-        $user->put('userName', $uniqid);
-        $user->put('password', $password);
+        $user->set('userName', $uniqid);
+        $user->set('password', $password);
         $res = $user->save();
 
         $this->assertEquals(201, $res->getStatusCode());
@@ -78,8 +78,8 @@ class NCMBUserTest extends \PHPUnit_Framework_TestCase
         $uniqid = uniqid('test', true);
         $password = 'password';
 
-        $user->put('userName', $uniqid);
-        $user->put('password', $password);
+        $user->set('userName', $uniqid);
+        $user->set('password', $password);
         $res = $user->save();
 
         $this->assertEquals(201, $res->getStatusCode());
@@ -104,8 +104,8 @@ class NCMBUserTest extends \PHPUnit_Framework_TestCase
         $user = new NCMBUser();
         $uniqid = uniqid('test', true);
         $password = 'password';
-        $user->put('userName', $uniqid);
-        $user->put('password', $password);
+        $user->set('userName', $uniqid);
+        $user->set('password', $password);
         $res = $user->save();
 
         $this->assertEquals(201, $res->getStatusCode());
