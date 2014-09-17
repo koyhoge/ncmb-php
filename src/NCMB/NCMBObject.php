@@ -1,8 +1,6 @@
 <?php
 namespace NCMB;
 
-use NCMB\NCMBAPIClient;
-
 class NCMBObject
 {
     private $className;
@@ -30,13 +28,14 @@ class NCMBObject
 
     public function save()
     {
-        $client = new NCMBAPIClient();
         $path = $this->getApiPath();
         $options = array(
             'json' => $this->data,
         );
 
         // TODO: put対応
+
+        $client = NCMB::createClient();
 
         return $client->post($path, $options);
     }

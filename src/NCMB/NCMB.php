@@ -11,12 +11,22 @@ class NCMB
 
     public static function init($appId, $clientKey)
     {
-        self::$params['appId'] = $appId;
+        self::$params['applicationKey'] = $appId;
         self::$params['clientKey'] = $clientKey;
     }
 
     public static function get($key)
     {
         return self::$params[$key];
+    }
+
+    public static function createClient()
+    {
+        $client = NCMBAPIClient::create(
+            self::get('applicationKey'),
+            self::get('clientKey')
+        );
+
+        return $client;
     }
 }

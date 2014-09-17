@@ -10,15 +10,24 @@ use GuzzleHttp\Exception\RequestException;
 class NCMBAPIClient
 {
     private $client;
+    private $config = array(
+        'apiUrl' => 'https://mb.api.cloud.nifty.com',
+        'apiVersion' => '2013-09-01',
+    );
 
-    public function __construct(GuzzleHttp\ClientInterface $client = null)
+    public static function create($applicationKey, $clientKey)
     {
-        $this->client = $client ? $client : new GuzzleHttp\Client();
+        $config = array(
+            'applicationKey' => $applicationKey,
+            'clientKey' => $clientKey,
+        );
+        return new self($config);
     }
 
-    public function getClient()
+    public function __construct(array $config, GuzzleHttp\ClientInterface $client = null)
     {
-        return $this->client;
+        $this->config = array_merge($this->config, $config);
+        $this->client = $client ? $client : new GuzzleHttp\Client();
     }
 
     public function get($path, $options = array())
@@ -42,12 +51,12 @@ class NCMBAPIClient
 
     protected function createAbsURL($path)
     {
-        return sprintf('%s/%s%s', NCMB::get('apiUrl'), NCMB::get('apiVersion'), $path);
+        return sprintf('%s/%s%s', $this->config['apiUrl'], $this->config['apiVersion'], $path);
     }
 
     protected function createDefaultHeaders($method, $url, array $options = array())
     {
-        $applicationKey = NCMB::get('appId');
+        $applicationKey = $this->config['applicationKey'];
         $timestamp = $this->timestamp();
         $query = isset($options['query']) ? $options['query'] : array();
 
@@ -78,8 +87,8 @@ class NCMBAPIClient
 
     protected function sign($method, $url, $params, $timestamp)
     {
-        $application_key = NCMB::get('appId');
-        $client_key = NCMB::get('clientKey');
+        $application_key = $this->config['applicationKey'];
+        $client_key = $this->config['clientKey'];
 
         $params['SignatureMethod'] = 'HmacSHA256';
         $params['SignatureVersion'] = 2;

@@ -1,9 +1,6 @@
 <?php
 namespace NCMB;
 
-use NCMB\NCMBAPIClient;
-use NCMB\NCMBObject;
-
 class NCMBUser extends NCMBObject
 {
     private $sessionToken = null;
@@ -30,8 +27,6 @@ class NCMBUser extends NCMBObject
 
     public function login($userName, $password)
     {
-        $path = '/login';
-        $client = new NCMBAPIClient();
         $options = array(
             'query' => array(
                 'userName' => $userName,
@@ -39,7 +34,8 @@ class NCMBUser extends NCMBObject
             ),
         );
 
-        $res = $client->get($path, $options);
+        $client = NCMB::createClient();
+        $res = $client->get('/login', $options);
 
         if ($res->getStatusCode() == 200) {
             $data = $res->json();
@@ -51,8 +47,6 @@ class NCMBUser extends NCMBObject
 
     public function logout()
     {
-        $path = '/logout';
-        $client = new NCMBAPIClient();
         $options = array();
         if ($sessionToken = $this->getSessionToken()) {
             $options['headers'] = array(
@@ -60,6 +54,8 @@ class NCMBUser extends NCMBObject
             );
         }
 
-        return $client->get($path, $options);
+        $client = NCMB::createClient();
+
+        return $client->get('/logout', $options);
     }
 }

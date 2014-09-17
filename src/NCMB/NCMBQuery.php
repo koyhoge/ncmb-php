@@ -1,8 +1,6 @@
 <?php
 namespace NCMB;
 
-use NCMB\NCMBAPIClient;
-
 class NCMBQuery
 {
     private $className;
@@ -20,7 +18,7 @@ class NCMBQuery
             $this->className
         );
 
-        $client = new NCMBAPIClient();
+        $client = NCMB::createClient();
 
         return $client->get($path, array(
             'query' => $queries
@@ -36,7 +34,7 @@ class NCMBQuery
             $objectId
         );
 
-        $client = new NCMBAPIClient();
+        $client = NCMB::createClient();
 
         return $client->get($path);
     }

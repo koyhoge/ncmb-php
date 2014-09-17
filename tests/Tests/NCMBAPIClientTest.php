@@ -7,11 +7,6 @@ use NCMB\NCMBAPIClient;
 
 class NCMBAPIClientTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        NCMB::init(TEST_APPLICATION_ID, TEST_CLIENT_KEY);
-    }
-
     /**
      * @test
      */
@@ -21,7 +16,7 @@ class NCMBAPIClientTest extends \PHPUnit_Framework_TestCase
         $path = '/classes/TestClass';
         $queries = array();
 
-        $client = new NCMBAPIClient();
+        $client = NCMBAPIClient::create(TEST_APPLICATION_ID, TEST_CLIENT_KEY);
         $res = $client->get($path, array(
             'query' => $queries
         ));
@@ -38,7 +33,7 @@ class NCMBAPIClientTest extends \PHPUnit_Framework_TestCase
     {
         $path = '/classes/TestClass';
 
-        $client = new NCMBAPIClient();
+        $client = NCMBAPIClient::create(TEST_APPLICATION_ID, TEST_CLIENT_KEY);
         $res = $client->post($path, array(
             'json' => array('message' => 'test'),
         ));
