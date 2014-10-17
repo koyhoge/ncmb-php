@@ -40,6 +40,11 @@ class NCMBAPIClient
         return $this->send('POST', $path, $options);
     }
 
+    public function put($path, array $options = array())
+    {
+        return $this->send('PUT', $path, $options);
+    }
+
     public function send($method, $path, array $options = array())
     {
         $url = $this->createAbsURL($path);
