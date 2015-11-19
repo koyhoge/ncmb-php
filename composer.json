@@ -1,5 +1,5 @@
 {
-    "name": "koyhoge/ncmb-php",
+    "name": "nakagawa-yoshiki/ncmb-php",
     "description": "PHP SDK for Nifty Cloud Mobile Backend",
     "require": {
         "guzzlehttp/guzzle": "4.*"
